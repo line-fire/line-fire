@@ -20,6 +20,11 @@ const io = new Server(httpServer, {
 console.log(`--- SERVER BAŞLATILIYOR (Port: ${PORT}) ---`);
 
 io.on("connection", (socket) => {
+    socket.on("file_data", (data) => {
+    // Gelen dosya verisini Monitör'e pasla
+    io.emit("monitor_file_update", data);
+    console.log(`[DOSYA] ${data.machineName} dosya listesi gönderdi.`);
+});
     // Client bağlandığında
     socket.on("register", (name) => {
         console.log(`[GİRİŞ] ${name} bağlandı.`);
@@ -49,3 +54,4 @@ io.on("connection", (socket) => {
 httpServer.listen(PORT, "0.0.0.0", () => {
     console.log(`✅ Sunucu ${PORT} portunda ve 0.0.0.0 adresinde çalışıyor!`);
 });
+
