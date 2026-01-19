@@ -1,12 +1,26 @@
 const { Server } = require("socket.io");
+const http = require("http"); // Node.js'in kendi http modülünü ekledik
+
+// 1. HTTP Sunucusunu oluşturuyoruz
+const httpServer = http.createServer();
+
+// 2. Render'ın verdiği portu alıyoruz
 const PORT = process.env.PORT || 3000;
-const io = new Server(PORT, {
-    cors: { origin: "*", methods: ["GET", "POST"] }
+
+// 3. Socket.io'yu bu HTTP sunucusuna bağlıyoruz
+const io = new Server(httpServer, {
+    cors: {
+        origin: "*", // Her yerden erişime izin ver
+        methods: ["GET", "POST"]
+    }
 });
-console.log(`--- SERVER BAŞLATILDI ---`);
+
+console.log(`--- SERVER BAŞLATILIYOR (Port: ${PORT}) ---`);
+
 io.on("connection", (socket) => {
+
+    // Sinyal (Heartbeat) Geldiğinde
     socket.on("heartbeat", (data) => {
-        // Gelen veriye saat ekle
         const time = new Date().toLocaleTimeString("tr-TR", { timeZone: "Europe/Istanbul" });
         
         const mesajPaketi = {
@@ -15,12 +29,24 @@ io.on("connection", (socket) => {
             cpuUsage: data.cpuUsage
         };
 
-        // Render'ın kendi loguna yaz
         console.log(`[LOG] ${time} - ${data.machineName}`);
 
-        // ÖNEMLİ: Bu mesajı bağlı olan SANA (Monitor'e) gönder
+        // Mesajı Monitor'e ilet
         io.emit("monitor_update", mesajPaketi);
+    });
+    
+    // Client ilk bağlandığında
+    socket.on("register", (name) => {
+        console.log(`[GİRİŞ] ${name} bağlandı.`);
+    });
+    
+     socket.on("disconnect", () => {
+        console.log(`[ÇIKIŞ] Bir bağlantı koptu.`);
     });
 });
 
-io.listen(PORT);
+// 4. DİKKAT: Burada 'io.listen' DEĞİL, 'httpServer.listen' kullanıyoruz.
+// Böylece portu sadece tek bir yapı dinlemiş oluyor.
+httpServer.listen(PORT, () => {
+    console.log(`✅ Sunucu ${PORT} portunda başarıyla çalışıyor!`);
+});
