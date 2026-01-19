@@ -1,16 +1,18 @@
 const { Server } = require("socket.io");
-const http = require("http"); // Node.js'in kendi http modülünü ekledik
+const http = require("http");
 
-// 1. HTTP Sunucusunu oluşturuyoruz
-const httpServer = http.createServer();
+// 1. Render'ın "Çalışıyor musun?" kontrolüne cevap vermek ZORUNDAYIZ.
+// Yoksa "Port tespit edilemedi" hatası verir.
+const httpServer = http.createServer((req, res) => {
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("Socket Sunucusu Calisiyor - Her sey yolunda!");
+});
 
-// 2. Render'ın verdiği portu alıyoruz
 const PORT = process.env.PORT || 3000;
 
-// 3. Socket.io'yu bu HTTP sunucusuna bağlıyoruz
 const io = new Server(httpServer, {
     cors: {
-        origin: "*", // Her yerden erişime izin ver
+        origin: "*",
         methods: ["GET", "POST"]
     }
 });
@@ -18,8 +20,12 @@ const io = new Server(httpServer, {
 console.log(`--- SERVER BAŞLATILIYOR (Port: ${PORT}) ---`);
 
 io.on("connection", (socket) => {
+    // Client bağlandığında
+    socket.on("register", (name) => {
+        console.log(`[GİRİŞ] ${name} bağlandı.`);
+    });
 
-    // Sinyal (Heartbeat) Geldiğinde
+    // Kalp atışı geldiğinde
     socket.on("heartbeat", (data) => {
         const time = new Date().toLocaleTimeString("tr-TR", { timeZone: "Europe/Istanbul" });
         
@@ -29,24 +35,17 @@ io.on("connection", (socket) => {
             cpuUsage: data.cpuUsage
         };
 
+        // Konsola ve Monitör'e bas
         console.log(`[LOG] ${time} - ${data.machineName}`);
-
-        // Mesajı Monitor'e ilet
         io.emit("monitor_update", mesajPaketi);
     });
-    
-    // Client ilk bağlandığında
-    socket.on("register", (name) => {
-        console.log(`[GİRİŞ] ${name} bağlandı.`);
-    });
-    
-     socket.on("disconnect", () => {
+
+    socket.on("disconnect", () => {
         console.log(`[ÇIKIŞ] Bir bağlantı koptu.`);
     });
 });
 
-// 4. DİKKAT: Burada 'io.listen' DEĞİL, 'httpServer.listen' kullanıyoruz.
-// Böylece portu sadece tek bir yapı dinlemiş oluyor.
-httpServer.listen(PORT, () => {
-    console.log(`✅ Sunucu ${PORT} portunda başarıyla çalışıyor!`);
+// 2. "0.0.0.0" ekleyerek Render'ın dışarıdan erişmesini garanti ediyoruz.
+httpServer.listen(PORT, "0.0.0.0", () => {
+    console.log(`✅ Sunucu ${PORT} portunda ve 0.0.0.0 adresinde çalışıyor!`);
 });
