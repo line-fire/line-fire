@@ -1,0 +1,15 @@
+{
+  "name": "render-server",
+  "version": "1.0.0",
+  "description": "Socket.io Server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "socket.io": "^4.7.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
