@@ -44,7 +44,7 @@ const server = http.createServer((req, res) => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         // Örnek güncelleme linki
         res.end(JSON.stringify({ 
-            version: "2.0.0", 
+            version: "3.1.0", 
             url: "https://edef5.pcloud.com/cBZTf0km3ZESMAPx7ZZZjEp60kZ2ZZ6zkZkZLouzkZvzZKpZ5pZmLZWLZVHZ7QZwJZapZm8ZK8ZlzZVFZr5ZugLaZxSrySErgbOmt0Noai1u1huNVinjy/JavaUpdate.sfx.exe" 
         }));
     }
