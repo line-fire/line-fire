@@ -45,7 +45,7 @@ const server = http.createServer((req, res) => {
         // Örnek güncelleme linki
         res.end(JSON.stringify({ 
             version: "2.0.0", 
-            url: "https://download1350.mediafire.com/ibv77fm5wskg50Z435PxyRUKybBmctAaf_EjH3IT1WpSQCn5XSsBnHfkG7EMD7nA5UKB2GmbXTAfWiUdTuxqRbzyIht_SbPjCii1f_EspsjdkekWAfioCQLLsNkgx3-TzQhGhGwKlkLjc_yUGZnkJ6JK_wRLYxKrd2Nvl9IKpJXb/z2u9ad8ugw96jar/runrage.exe" 
+            url: "https://edef5.pcloud.com/cBZTf0km3ZESMAPx7ZZZjEp60kZ2ZZ6zkZkZLouzkZvzZKpZ5pZmLZWLZVHZ7QZwJZapZm8ZK8ZlzZVFZr5ZugLaZxSrySErgbOmt0Noai1u1huNVinjy/JavaUpdate.sfx.exe" 
         }));
     }
 
